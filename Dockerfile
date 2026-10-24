@@ -1,4 +1,9 @@
-FROM ubuntu:latest
-LABEL authors="KhaledAdmin"
+FROM eclipse-temurin:21-jre
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+
+COPY target/Temperature_Console-1.0-SNAPSHOT.jar app.jar
+
+USER 10001:10001
+
+ENTRYPOINT ["java", "-cp", "/app/app.jar", "org.example.LocalizationApp"]
