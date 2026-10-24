@@ -4,7 +4,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
-public class Main {
+public class LocalizationApp  {
+    private LocalizationApp() {
+    }
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
