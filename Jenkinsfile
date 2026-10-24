@@ -11,29 +11,30 @@ pipeline {
                 git 'https://github.com/Khaleddamascene/Temperature_Console.git'
             }
         }
-        stage('Build') {
+
+        stage('Build, Test and Coverage') {
             steps {
-                bat 'mvn clean install' // sh for linux and ios
+                bat 'mvn clean verify'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
             }
         }
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-            }
-        }
-        stage('Code Coverage') {
-            steps {
-                bat 'mvn jacoco:report'
-            }
-        }
-        stage('Publish Test Results') {
-            steps {
-                junit '**/target/surefire-reports/*.xml'
-            }
-        }
+
         stage('Publish Coverage Report') {
             steps {
-                jacoco()
+                jacoco(
+                        execPattern: 'target/jacoco.exec',
+                        classPattern: 'target/classes',
+                        sourcePattern: 'src/main/java'
+                )
+
+                archiveArtifacts(
+                        artifacts: 'target/site/jacoco/**',
+                        allowEmptyArchive: false
+                )
             }
         }
     }
